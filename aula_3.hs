@@ -7,10 +7,24 @@ posicoes y list = pos y list 1
   where pos _ [] _ = []
         pos y (x:xs) acc = [z | z <- [acc], x==y]++[w | w <- pos y xs (acc+1)]
 
--- split y list = splitRecur y list ""
---   where splitRecur _ [] _ = []
---         splitRecur y list acc = [ (a,b) | a <- l]
+posNext _ [] = 0
+posNext y (x:xs)
+  | (x==y) = 0
+  | otherwise = 1 + posNext y xs
+
+mapl list = mapList list 0
+mapList [] _ = []
+mapList (x:xs) i = (i,x):mapList xs (i+1)
+
+split y list= let l = mapl list in
+              [[z | (i,z) <- l, let pos = posNext y list, i<pos],
+               [w | (i,w) <- l, let pos = posNext y list, i>pos]]
+
+splitAll y list = let l = mapl list in 
+
 --
--- splitAll y list = splitAllRecur y list 0
---   where splitAllRecur _ [] _ = []
---         splitAllRecur y list acc = [ (x:y) | x <- list , acc == 0]
+-- split y str = splitRecur y str ""
+--   where splitRecur _ "" acc = [reverse acc]
+--         splitRecur y (x:xs) acc
+--           | (x==y) = [reverse acc]++[xs]
+--           | otherwise = splitRecur y xs (x:acc)
