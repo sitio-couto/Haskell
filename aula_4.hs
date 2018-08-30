@@ -50,7 +50,10 @@ testOrder [ ] = True
 testOrder [x] = True
 testOrder (x:xs) = (x <= head xs)&&(testOrder xs)
 
-
+--Get tree height
+getHeight :: (Ord a) => Tree a -> Int
+getHeight Empty = -1
+getHeight (Node n tl td) = 1 + max (getHeight tl) (getHeight td)
 
 -- --Test if tree is binary Tree
 -- testBin :: (Ord a) => Tree a -> Bool
