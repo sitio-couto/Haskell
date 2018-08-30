@@ -2,7 +2,7 @@
 root = (Node 5 (Node 3 (Node 2 Empty Empty) (Node 4 Empty Empty)) (Node 7 (Node 6 Empty Empty) (Node 8 Empty Empty)))
 root1 = Empty
 root2 = (Node 5 (Node 3 (Node 2 Empty Empty) (Node 4 Empty Empty)) (Node 7 (Node 6 (Node 0 Empty Empty) Empty) (Node 8 Empty Empty)))
-a = removeNode (removeNode root 2) 3
+a = makeTree [1..10]
 
 data Tree a = Empty | Node a (Tree a) (Tree a) deriving (Eq, Show, Read)
 
@@ -63,3 +63,18 @@ getHeight (Node n tl td) = 1 + max (getHeight tl) (getHeight td)
 makeTree :: (Ord a) => [a] -> Tree a
 makeTree [] = Empty
 makeTree (x:xs) = addNode (makeTree xs) x
+
+--Balance binary Tree
+-- balanceTree :: (Ord a) => Tree a -> Tree a
+-- rebuildTree :: (Ord a) => [a] -> Int -> Tree a
+balanceTree root = let l = inOrder root in rebuildTree l (length l)
+rebuildTree [] _ = Empty
+rebuildTree l s = (Node n tl td)
+                  where n = l!!(quot s 2)
+                        tl = rebuildTree (take (quot s 2) l) (quot s 2)
+                        td = rebuildTree (drop (s-(quot s 2)) l) (s-(quot s 2)-1)
+
+
+
+
+                        --
