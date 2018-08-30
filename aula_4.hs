@@ -60,6 +60,6 @@ getHeight Empty = -1
 getHeight (Node n tl td) = 1 + max (getHeight tl) (getHeight td)
 
 --Make binary tree from list
-makeTree :: Ord a => [a] -> Tree a
+makeTree :: (Ord a) => [a] -> Tree a
 makeTree [] = Empty
 makeTree (x:xs) = addNode (makeTree xs) x
