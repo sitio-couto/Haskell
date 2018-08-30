@@ -4,7 +4,6 @@ root1 = Empty
 root2 = (Node 5 (Node 3 (Node 2 Empty Empty) (Node 4 Empty Empty)) (Node 7 (Node 6 (Node 0 Empty Empty) Empty) (Node 8 Empty Empty)))
 a = removeNode (removeNode root 2) 3
 
-
 data Tree a = Empty | Node a (Tree a) (Tree a) deriving (Eq, Show, Read)
 
 --Add nodes to binary tree
@@ -37,10 +36,15 @@ findNode (Node n tl td) target
   | (target < n)  = findNode tl target
   | otherwise = findNode td target
 
---Get in-order route of Tree
+--Get inorder route of Tree
 inOrder :: Tree a -> [a]
 inOrder Empty = []
 inOrder (Node n tl td) = (inOrder tl)++[n]++(inOrder td)
+
+--Get preorder route of tree
+preOrder :: Tree a -> [a]
+preOrder Empty = []
+preOrder (Node n tl td) = n:(preOrder tl)++(preOrder td)
 
 --Test if tree is a binary search Tree
 testBin :: (Ord a) => Tree a -> Bool
@@ -55,15 +59,7 @@ getHeight :: (Ord a) => Tree a -> Int
 getHeight Empty = -1
 getHeight (Node n tl td) = 1 + max (getHeight tl) (getHeight td)
 
--- --Test if tree is binary Tree
--- testBin :: (Ord a) => Tree a -> Bool
--- testBin (Node _ Empty Empty) = True
--- testBin (Node n Empty (Node b tlb tdb))
---   | (b <= n) = (testBin tlb)&&(testBin tdb)
---   | otherwise = False
--- testBin (Node n (Node a tla tda) Empty)
---   | (a <= n) = (testBin tla)&&(testBin tda)
---   | otherwise = False
--- testBin (Node n (Node a tla tda) (Node b tlb tdb))
---   | (a <= n)&&(b >= n) = (testBin tla)&&(testBin tda)&&(testBin tlb)&&(testBin tdb)
---   | otherwise = False
+--Make binary tree from list
+makeTree :: Ord a => [a] -> Tree a
+makeTree [] = Empty
+makeTree (x:xs) = addNode (makeTree xs) x
