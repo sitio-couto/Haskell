@@ -65,19 +65,20 @@ makeTree [] = Empty
 makeTree (x:xs) = addNode (makeTree xs) x
 
 --Balance binary Tree
--- balanceTree :: (Ord a) => Tree a -> Tree a
--- rebuildTree :: (Ord a) => [a] -> Int -> Tree a
+balanceTree :: (Ord a) => Tree a -> Tree a
+rebuildTree :: (Ord a) => [a] -> Int -> Tree a
 balanceTree root = let l = inOrder root in rebuildTree l (length l)
 rebuildTree [] 0 = Empty
 rebuildTree l s = (Node n tl td)
                   where n = l!!(quot s 2)
                         tl = rebuildTree (take (quot s 2) l) (quot s 2)
-                        td = rebuildTree (drop (s-(quot s 2)) l) (s-(quot s 2)-1)
+                        td = rebuildTree (drop ((quot s 2)+1) l) (s-(quot s 2)-1)
 
-showSplits [] _ = []
-showSplits l s = let p = quot s 2
-                 in show ((take p l), (drop (s-p-1) l))
-
-
+--Check if tree is balanced
+checkBalance :: (Ord a) => Tree a -> Bool
+checkBalance Empty = True
+checkBalance (Node n tl td) = if abs ((getHeight tl) - (getHeight td)) > 1
+                              then False
+                              else (checkBalance tl)&&(checkBalance td)
 
                         --
