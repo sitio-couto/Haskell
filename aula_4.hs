@@ -1,9 +1,11 @@
 
 root = (Node 5 (Node 3 (Node 2 Empty Empty) (Node 4 Empty Empty)) (Node 7 (Node 6 Empty Empty) (Node 8 Empty Empty)))
+root1 = Empty
+root2 = (Node 5 (Node 3 (Node 2 Empty Empty) (Node 4 Empty Empty)) (Node 7 (Node 6 (Node 0 Empty Empty) Empty) (Node 8 Empty Empty)))
 
---Add nodes to binary tree
 data Tree a = Empty | Node a (Tree a) (Tree a) deriving (Eq, Show, Read)
 
+--Add nodes to binary tree
 addNode :: (Ord a) => Tree a -> a -> Tree a
 addNode Empty new = (Node new Empty Empty)
 addNode (Node n tl td) new
@@ -18,15 +20,30 @@ findNode (Node n tl td) target
   | (target < n)  = findNode tl target
   | otherwise = findNode td target
 
---Test if tree is binary Tree
--- binTree (Node n tl td) = testTree tl td n
--- testTree
--- testTree (Node a tl td) Empty n
---   | (a <= n) = (testTree tl td)
+--Get in-order route of Tree
+inOrder :: Tree a -> [a]
+inOrder Empty = []
+inOrder (Node n tl td) = (inOrder tl)++[n]++(inOrder td)
+
+--Test if tree is a binary search Tree
+testBin :: (Ord a) => Tree a -> Bool
+testBin root = testOrder (inOrder root)
+testOrder :: (Ord a) => [a] -> Bool
+testOrder [ ] = True
+testOrder [x] = True
+testOrder (x:xs) = (x <= head xs)&&(testOrder xs)
+
+
+
+-- --Test if tree is binary Tree
+-- testBin :: (Ord a) => Tree a -> Bool
+-- testBin (Node _ Empty Empty) = True
+-- testBin (Node n Empty (Node b tlb tdb))
+--   | (b <= n) = (testBin tlb)&&(testBin tdb)
 --   | otherwise = False
--- testTree Empty (Node a tl td) n
---   | (a >= n) = (testTree tl td)
+-- testBin (Node n (Node a tla tda) Empty)
+--   | (a <= n) = (testBin tla)&&(testBin tda)
 --   | otherwise = False
--- testTree (Node a tla tda) (Node b tlb tdb) n
---   | (a <= n) && (b >= n) = (testTree tla tda a) & (testTree tlb tdb b)
+-- testBin (Node n (Node a tla tda) (Node b tlb tdb))
+--   | (a <= n)&&(b >= n) = (testBin tla)&&(testBin tda)&&(testBin tlb)&&(testBin tdb)
 --   | otherwise = False
