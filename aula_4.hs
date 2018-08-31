@@ -70,9 +70,10 @@ rebuildTree :: (Ord a) => [a] -> Int -> Tree a
 balanceTree root = let l = inOrder root in rebuildTree l (length l)
 rebuildTree [] 0 = Empty
 rebuildTree l s = (Node n tl td)
-                  where n = l!!(quot s 2)
-                        tl = rebuildTree (take (quot s 2) l) (quot s 2)
-                        td = rebuildTree (drop ((quot s 2)+1) l) (s-(quot s 2)-1)
+                  where p = (halve s)
+                        n = l!!p
+                        tl = rebuildTree (pick p l) p
+                        td = rebuildTree (leave (p+1) l) (s-p-1)
 
 --Check if tree is balanced
 checkBalance :: (Ord a) => Tree a -> Bool
@@ -80,5 +81,22 @@ checkBalance Empty = True
 checkBalance (Node n tl td) = if abs ((getHeight tl) - (getHeight td)) > 1
                               then False
                               else (checkBalance tl)&&(checkBalance td)
+
+--Check division and returns integer
+halve :: (Num a, Ord a) => a -> a
+halve v = divBy2 v 0
+    where divBy2 v x = if x*2 > v then x-1 else divBy2 v (x+1)
+
+--leave firs
+leave :: Int -> [a] -> [a]
+leave 0 l = l
+leave _ [] = []
+leave n (x:xs) = leave (n-1)  xs
+
+--Take first N elements
+pick :: Int -> [a] -> [a]
+pick _ [] = []
+pick 0 _ = []
+pick n (x:xs) = x:(pick (n-1) xs)
 
                         --
