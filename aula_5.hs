@@ -15,47 +15,26 @@ sumPairIndex l = foldl (\acc (x,y) -> if mod x 2 == 0 then acc+y else acc) 0 (zi
 
 isThere x l = [] /= filter (\y -> x==y) l
 
-findPos i l = foldl (\i (x,y) -> if i==y then x else i) i (zip [1..length l] l)
+-- findPos i l = foldr (\(x,y) i -> if i==y then x else i) i (zip [1..length l] l)
 
-countItem _ [] = 0
-countItem y (x:xs)
-  | (x==y) = 1 + countItem y xs
-  | otherwise = countItem y xs
+countItem i l = foldr (\x i-> i+x) 0 (zipWith (\x y -> if x==y then 1 else 0) bin)
+                where b = replicate (length l) i) l
 
--- maxElem x l = fold 3
+maxElem l = foldr (\x i -> if x > i then x else i) (head l) l
 
-maxElem [x] = x
-maxElem (x:xs) = let
-    y = maxElem xs
-  in if (x > y) then x else y
+revertList l = foldl (\i x -> x:i) [] l
 
-revertList lo = revertRecurse lo []
-revertRecurse [] acc = acc
-revertRecurse (x:xs) acc = revertRecurse xs (x:acc)
+mergeList1 a b = foldr (\(x,y) i -> x:y:i) [] (zip a b)
 
-mergeList1 xs [] = []
-mergeList1 [] ys = []
-mergeList1 (x:xs) (y:ys) = x:y:(mergeList1 xs ys)
+shorterVec a b = if length a < length b then b else a
+mergeList2 a b = (foldr (\(x,y) i -> x:y:i) [] (zip a b))++drop s l
+                  where s = min (length a) (length b)
+                        l = shorterVec a b
 
-mergeList2 xs [] = xs
-mergeList2 [] ys = ys
-mergeList2 (x:xs) (y:ys) = x:y:(mergeList2 xs ys)
-
-isSorted [x] = True
-isSorted (x:xs) = (x <= head xs) && isSorted xs
-
-createList n = createRecurse n 1
-createRecurse 1 acc = [acc]
-createRecurse n acc = acc:(createRecurse (n-1) (acc+1))
-
-getLast [x] = x
-getLast (x:xs) = getLast xs
-
-getInit [x] = []
-getInit (x:xs) = x:getInit xs
-
-shiftl (x:xs) = xs ++ [x]
-shiftr l =  getLast l:getInit l
+isSorted l = foldl (\i (x,y) -> if x<=y then i&&True else False) True (pair l)
+pair l = zip l1 l2
+         where l1 = init l
+               l2 = tail l
 
 breakLeft 0 _ = []
 breakLeft _ [] = []
