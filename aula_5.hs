@@ -4,27 +4,25 @@ list = [1..10]
 list2 = revertList list
 list3 = [5,5,1,2,1,2,1,2,3,3,5]
 
-listLength [] = 0
-listLength (x:xs) = 1 + listLength xs
+-- listLength [] = 0
+-- listLength (x:xs) = 1 + listLength xs
+
+listLength = foldl (\acc _ -> acc+1) 0
 
 sumAll l = foldl (+) 0 l
 
-sumPairIndex [] = 0
-sumPairIndex [x] = 0
-sumPairIndex (dump:x:xs) = x + sumPairIndex xs
+sumPairIndex l = foldl (\acc (x,y) -> if mod x 2 == 0 then acc+y else acc) 0 (zip [1..length l] l)
 
 isThere x l = [] /= filter (\y -> x==y) l
 
-findPos y l = findRecurse y l 0
-findRecurse _ [] _ = 0
-findRecurse y (x:xs) acc
-  | (x==y) = acc + 1
-  | otherwise = findRecurse y xs (acc+1)
+findPos i l = foldl (\i (x,y) -> if i==y then x else i) i (zip [1..length l] l)
 
 countItem _ [] = 0
 countItem y (x:xs)
   | (x==y) = 1 + countItem y xs
   | otherwise = countItem y xs
+
+-- maxElem x l = fold 3
 
 maxElem [x] = x
 maxElem (x:xs) = let
