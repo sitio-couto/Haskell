@@ -7,7 +7,7 @@ list3 = [5,5,1,2,1,2,1,2,3,3,5]
 -- listLength [] = 0
 -- listLength (x:xs) = 1 + listLength xs
 
-listLength = foldl (\acc _ -> acc+1) 0
+listLength l = foldl (\acc _ -> acc+1) 0 l
 
 sumAll l = foldl (+) 0 l
 
@@ -17,8 +17,7 @@ isThere x l = [] /= filter (\y -> x==y) l
 
 -- findPos i l = foldr (\(x,y) i -> if i==y then x else i) i (zip [1..length l] l)
 
-countItem i l = foldr (\x i-> i+x) 0 (zipWith (\x y -> if x==y then 1 else 0) bin)
-                where b = replicate (length l) i) l
+countItem i l = foldr (+) 0 (map (\x -> if x==i then 1 else 0) l)
 
 maxElem l = foldr (\x i -> if x > i then x else i) (head l) l
 
@@ -36,32 +35,15 @@ pair l = zip l1 l2
          where l1 = init l
                l2 = tail l
 
-breakLeft 0 _ = []
-breakLeft _ [] = []
-breakLeft n (x:xs) = x:breakLeft (n-1) xs
+dumpAll i l = foldr (\(x,y) c -> if x==y then c else y:c) [] (map (\x -> (i,x)) l)
 
-breakRight 0 l = l
-breakRight _ [] = []
-breakRight n (x:xs) = breakRight (n-1) xs
-
-shiftln n l = let
-  y = mod n (listLength l)
-  in breakRight y l ++ breakLeft y l
-
-shiftrn n l = let
-  leng = listLength l
-  y = 1 + mod (leng - (n + 1)) leng
-  in breakRight y l ++ breakLeft y l
+changeAll o n l = foldr (\(x,y) c -> if x==y then n:c else y:c) [] (map (\x -> (o,x)) l)
 
 dumpOne _ [] = []
 dumpOne y (x:xs)
   | (x==y) = xs
   | otherwise = x:(dumpOne y xs)
 
-dumpAll _ [] = []
-dumpAll y (x:xs)
-  | (x==y) = dumpAll y xs
-  | otherwise = x:(dumpAll y xs)
 
 dumpNs 0 _ l = l
 dumpNs _ _ [] = []
@@ -76,10 +58,6 @@ changeOne old new (x:xs)
   | (x==old) = new:xs
   | otherwise = x:changeOne old new xs
 
-changeAll _ _ [] = []
-changeAll old new (x:xs)
-  | (x==old) = new:changeAll old new xs
-  | otherwise = x:changeAll old new xs
 
 changeNs 0 _ _ l = l
 changeNs _ _ _ [] = []
