@@ -4,9 +4,6 @@ list = [1..10]
 list2 = revertList list
 list3 = [5,5,1,2,1,2,1,2,3,3,5]
 
--- listLength [] = 0
--- listLength (x:xs) = 1 + listLength xs
-
 listLength l = foldl (\acc _ -> acc+1) 0 l
 
 sumAll l = foldl (+) 0 l
@@ -39,13 +36,10 @@ dumpAll i l = foldr (\x c -> if x==i then c else x:c) [] l
 
 changeAll o n l = foldr (\x c -> if x==o then n:c else x:c) [] l
 
-t m = foldr (\x c -> [x]:c ) [] m
+tp m = foldr (\x c -> zipWith (\[p] q -> p:q) (foldr (\y c -> [y]:c ) [] x) c) b m
+       where b = replicate (length (m!!0)) []
 
-t1 a b = zipWith (\[a] b -> a:b) (t a) b
-
-t2 m = foldr (\x c -> t2 x c) base m
-       where base = replicate $ length m!!0 $ []
--- transpose2 m = foldr (\x c -> zipWith (\[a] b -> a:b) (transpose x) c) [] m
-
-
--- transpose m = foldl (\(i,m) mt -> mt:foldr (\x c -> (x!!i):c) [] m) [] $ zip [0..length m] m
+-- t m = foldr (\x c -> [x]:c ) [] m
+-- t1 a b = zipWith (\[a] b -> a:b) (t a) b
+-- t2 m = foldr (\x c -> t1 x c) base m
+--        where base = replicate (length (m!!0)) []
