@@ -1,5 +1,7 @@
 
 mx = [[1,2,3],[4,5,6],[7,8,9],[0,0,-1]]
+ma = [[12,3,43],[0,22,1]]
+mb = [[31,5],[1,0],[0,7]]
 list = [1..10]
 list2 = revertList list
 list3 = [5,5,1,2,1,2,1,2,3,3,5]
@@ -38,6 +40,12 @@ changeAll o n l = foldr (\x c -> if x==o then n:c else x:c) [] l
 
 tp m = foldr (\x c -> zipWith (\[p] q -> p:q) (foldr (\y c -> [y]:c ) [] x) c) b m
        where b = replicate (length (m!!0)) []
+
+matMul a b = foldr (\i m -> (foldr (\j c -> (dot i j):c) [] $ tp b):m) [] $ a
+dot a b = foldl (+) 0 (zipWith (*) a b)
+
+-- m0 i b = foldr (\j c -> (dot i j):c) [] b
+-- m1 a b = foldr (\i m -> (m0 i $ tp b):m) [] $ a
 
 -- t m = foldr (\x c -> [x]:c ) [] m
 -- t1 a b = zipWith (\[a] b -> a:b) (t a) b
